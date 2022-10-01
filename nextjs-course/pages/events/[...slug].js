@@ -60,7 +60,7 @@ export default function FilteredEventsPage (props) {
                     <p>No events found for the chosen filter!</p>
                 </ErrorAlert>
                 <div className="center">
-                    <Button link="/events">Show All Events!</Button>
+                    <Button link="/events">Show All Events</Button>
                 </div>
             </>
         )
