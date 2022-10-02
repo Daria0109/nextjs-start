@@ -7,11 +7,22 @@ import Button from '../../components/ui/button';
 import useSWR from 'swr';
 import { useEffect, useState } from 'react';
 import { transformDataObjectToArray } from '../../helpers/object-utils';
+import Head from 'next/head';
 
-export default function FilteredEventsPage (props) {
+export default function FilteredEventsPage () {
     const [loadedEvents, setLoadedEvents] = useState(null);
     const router = useRouter();
     const filterData = router.query.slug;
+
+    let headTitle = (
+        <Head>
+            <title>Filtered events</title>
+            <meta
+                name="description"
+                content={`All events for your choice.`}
+            />
+        </Head>
+    )
 
     const { data, error } = useSWR('https://nextjx-learning-default-rtdb.firebaseio.com/events.json', fetcher);
 
@@ -23,7 +34,12 @@ export default function FilteredEventsPage (props) {
     }, [data])
 
     if (!loadedEvents) {
-        return <p className="center">Loading...</p>
+        return (
+            <>
+                {headTitle}
+                <p className="center">Loading...</p>
+            </>
+        )
     }
 
     const filterYear = +filterData[0];
@@ -43,6 +59,7 @@ export default function FilteredEventsPage (props) {
         || error) {
         return (
             <>
+                {headTitle}
                 <ErrorAlert>
                     <p className="center">Invalid filter! Please adjust your values!</p>
                 </ErrorAlert>
@@ -53,9 +70,21 @@ export default function FilteredEventsPage (props) {
         )
     }
 
+    headTitle = (
+        <Head>
+            <title>Filtered events</title>
+            <meta
+                name="description"
+                content={`All events for ${filterMonth}/${filterYear}`}
+            />
+        </Head>
+    )
+
+
     if (!filteredEvents || !filteredEvents.length) {
         return (
             <>
+                {headTitle}
                 <ErrorAlert>
                     <p>No events found for the chosen filter!</p>
                 </ErrorAlert>
@@ -70,6 +99,14 @@ export default function FilteredEventsPage (props) {
 
     return (
         <>
+            {headTitle}
+            <Head>
+                <title>Filtered events</title>
+                <meta
+                    name="description"
+                    content={`All events for ${filterMonth}/${filterYear}`}
+                />
+            </Head>
             <ResultsTitle date={date} />
             <EventList items={filteredEvents} />
         </>
