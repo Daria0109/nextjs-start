@@ -1,12 +1,24 @@
 import classes from './newsletter-registration.module.css';
+import { useState } from 'react';
 
 function NewsletterRegistration() {
+	const [email, setEmail] = useState('');
+
+	const onChangeEmailHandler = (e) => {
+		setEmail(e.target.value);
+	}
+
 	function registrationHandler(event) {
 		event.preventDefault();
 
-		// fetch user input (state or refs)
-		// optional: validate input
-		// send valid data to API
+		fetch('/api/newsletter', {
+			method: 'POST',
+			body: JSON.stringify({ userEmail: email }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json())
+			.then(data => console.log(data))
 	}
 
 	return (
@@ -19,6 +31,8 @@ function NewsletterRegistration() {
 						id='email'
 						placeholder='Your email'
 						aria-label='Your email'
+						value={email}
+						onChange={onChangeEmailHandler}
 					/>
 					<button>Register</button>
 				</div>
