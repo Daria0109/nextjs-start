@@ -12,7 +12,7 @@ async function handler (req, res) {
 			const isInvalidText = !text || !text.trim();
 
 			if (isInvalidEmail || isInvalidName || isInvalidText) {
-				res.status(422).json({ message: 'Input is invalid' });
+				setTimeout(() => res.status(422).json({ message: 'Input is invalid' }), 2000);
 				return;
 			}
 
@@ -23,10 +23,12 @@ async function handler (req, res) {
 			data.push(newComment);
 			writeDataToFile(filePath, JSON.stringify(data));
 
-			return res.status(201).json({ message: 'Added a comment.', comment: newComment });
+			setTimeout(() => res.status(201).json({ message: 'Added a comment.', comment: newComment }), 3000)
+			return;
 		}
 	} catch (err) {
-		return res.status(500).json({ message: 'Inserting comment failed' });
+		setTimeout(() => res.status(500).json({ message: 'Inserting comment failed' }), 2000);
+		return;
 	}
 
 	try {
@@ -35,10 +37,10 @@ async function handler (req, res) {
 			const data = extractDataFromFile(filePath);
 			const specificEventComments = data.filter(item => item.eventId === eventId);
 
-			return res.status(200).json({ comments: specificEventComments });
+			setTimeout(() => res.status(200).json({ comments: specificEventComments }), 3000);
 		}
 	} catch (err) {
-		return res.status(500).json({ comments: 'Getting comments failed.' });
+		setTimeout(() => res.status(500).json({ comments: 'Getting comments failed.' }), 2000);
 	}
 
 }

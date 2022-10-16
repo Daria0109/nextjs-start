@@ -6,8 +6,7 @@ function handler (req, res) {
 	try {
 		const { userEmail } = req.body;
 		if (!userEmail || !userEmail.includes('@')) {
-			res.status(401).json({ message: 'Invalid email address.' });
-
+			setTimeout(() => res.status(401).json({ message: 'Invalid email address.' }), 2000);
 			return;
 		}
 		const filePath = buildPath('emails.json');
@@ -15,9 +14,10 @@ function handler (req, res) {
 		data.push({ id: uuidv4(), email: userEmail });
 		writeDataToFile(filePath, JSON.stringify(data));
 
-		res.status(201).json({ message: 'Signed up!' });
+		setTimeout(() => res.status(201).json({ message: 'Signed up!' }), 3000);
+
 	} catch (err) {
-		res.status(500).json({ message: 'Inserting new email failed' });
+		setTimeout(() => res.status(500).json({ message: 'Inserting new email failed' }), 2000);
 	}
 }
 
